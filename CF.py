@@ -120,44 +120,46 @@ class collaborative_filering:
 
 # real test
 
-res = 0
-
-for i in range(1, 6):
-    train_path = f'./data/datasets/rating/kfold/u{i}.base.csv'
-    test_path = f'./data/datasets/rating/kfold/u{i}.test.csv'
-    rating_train = pd.read_csv(train_path, sep=',', encoding='latin-1')[['user index', 'movie index', 'rating']].values
-    rating_test = pd.read_csv(test_path, sep=',', encoding='latin-1')[['user index', 'movie index', 'rating']].values
-
-
-    CF_model = collaborative_filering(rating_train, k_neighbors=30, mode=1)
-    CF_model.fit()
-
-    no_tests = rating_test.shape[0]
-    square_error = 0
-
-    Y_predict = []
-    for i in range(no_tests):
-        predict = CF_model.predict(rating_test[i, 0], rating_test[i, 1])
-        Y_predict.append(predict)
-        square_error += (predict - rating_test[i, 2]) ** 2
-
-    RMSE = np.sqrt(square_error/(no_tests))
-
-    print(RMSE)
-    res = res + RMSE
-    print(CF_model.suggest(1368)[:10])
-
-    X = [i for i in range(no_tests)][:100]
-
-    Y_true = rating_test[:, 2][:100]
-
-    print(Y_predict[:100])
-    print(Y_true)
-    # plt.plot(X, Y_predict[:100], color='green')
-    # plt.scatter(X, Y_true)
-    # plt.show()
+neighbors = [1, 10, 20, 30, 50, 100]
+for neighbor in neighbors:
+    res = 0
+    for i in range(1, 6):
+        train_path = f'./data/datasets/rating/kfold/u{i}.base.csv'
+        test_path = f'./data/datasets/rating/kfold/u{i}.test.csv'
+        rating_train = pd.read_csv(train_path, sep=',', encoding='latin-1')[['user index', 'movie index', 'rating']].values
+        rating_test = pd.read_csv(test_path, sep=',', encoding='latin-1')[['user index', 'movie index', 'rating']].values
 
 
-print('RMSE: ', res / 5)
+        CF_model = collaborative_filering(rating_train, k_neighbors=neighbor, mode=1)
+        CF_model.fit()
+
+        no_tests = rating_test.shape[0]
+        square_error = 0
+
+        Y_predict = []
+        for i in range(no_tests):
+            predict = CF_model.predict(rating_test[i, 0], rating_test[i, 1])
+            Y_predict.append(predict)
+            square_error += (predict - rating_test[i, 2]) ** 2
+
+        RMSE = np.sqrt(square_error/(no_tests))
+
+        print(RMSE)
+        res = res + RMSE
+        # print(CF_model.suggest(1368)[:10])
+
+        # X = [i for i in range(no_tests)][:100]
+
+        # Y_true = rating_test[:, 2][:100]
+
+        # print(Y_predict[:100])
+        # print(Y_true)
+        # plt.plot(X, Y_predict[:100], color='green')
+        # plt.scatter(X, Y_true)
+        # plt.show()
+    print('neighbor: ', neighbor, '-', 'RMSE: ', res / 5)
+
+
+
 
 

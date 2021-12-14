@@ -22,7 +22,7 @@ def crawl_movie_ids():
         item_id_list = get_all_movie_ids_from_genre(links)
         write_csv_file(item_id_list, item_id_list_path, 'w')
             
-crawl_movie_ids() 
+# crawl_movie_ids() 
 # ------------------------------------------------------------------
 
 # 2. Combine movie ids -> distribute them in ./data/datasets/movie/ids.txt
@@ -46,7 +46,7 @@ def combine_movie_ids_from_category_dir():
     movie_ids_path = os.path.join('data/datasets/movie/', 'ids.txt')
     write_csv_file(distinct_movie_ids, movie_ids_path, 'w')
     
-combine_movie_ids_from_category_dir()
+# combine_movie_ids_from_category_dir()
 # --------------------------------------------------------------------
 
 # 3. Crawl movie details from all movie ids -> distribute them in ./data/datasets/movie/details.csv
@@ -62,7 +62,7 @@ def crawl_movie_details():
     for movie_id in movie_id_file:
         write_csv_file([get_detail_movie_by_movie_id(movie_id)], movie_detail_path, 'a')
                 
-crawl_movie_details()
+# crawl_movie_details()
 # --------------------------------------------------------------------
 
 # 4. Crawl user ids by finding user ids appear in rating box
@@ -78,7 +78,7 @@ def crawl_user_ids():
         user_id_list = get_user_id_list_rating_a_movie(movie_id.strip())
         write_csv_file(user_id_list, user_id_list_path, 'a')
 
-crawl_user_ids()
+# crawl_user_ids()
 # --------------------------------------------------------------------
 
 # 5. Crawl ratings by finding contents in rating box
@@ -95,7 +95,7 @@ def crawl_rating_list():
         rating_list = get_rating_list_in_a_movie(movie_id.strip())
         write_csv_file(rating_list, rating_list_path, 'a')
 
-crawl_rating_list()
+# crawl_rating_list()
 # --------------------------------------------------------------------
 
 # 6. Crawl more ratings by getting ratings of each user

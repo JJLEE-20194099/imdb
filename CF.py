@@ -19,8 +19,8 @@ class collaborative_filering:
         self.Y_utility = None
         # self.no_users = int(np.max(self.Y[:, 0])) + 1
         # self.no_movies = int(np.max(self.Y[:, 1])) + 1
-        self.no_users = 1415
-        self.no_movies = 9385
+        self.no_users = 9385
+        self.no_movies = 1415
 
     def insert(self, data):
         self.Y = np.concatenate((self.Y, data), axis = 0)
@@ -123,15 +123,17 @@ class collaborative_filering:
 neighbors = [1, 10, 20, 30, 50, 100]
 for neighbor in neighbors:
     res = 0
-    for i in range(1, 6):
+    for i in range(1, 2):
         train_path = f'./data/datasets/rating/kfold/u{i}.base.csv'
         test_path = f'./data/datasets/rating/kfold/u{i}.test.csv'
         rating_train = pd.read_csv(train_path, sep=',', encoding='latin-1')[['user index', 'movie index', 'rating']].values
         rating_test = pd.read_csv(test_path, sep=',', encoding='latin-1')[['user index', 'movie index', 'rating']].values
 
 
-        CF_model = collaborative_filering(rating_train, k_neighbors=neighbor, mode=1)
+        CF_model = collaborative_filering(rating_train, k_neighbors=neighbor, mode=0)
         CF_model.fit()
+        print(CF_model.similarity_matrix.shape)
+        print(CF_model.similarity_matrix)
 
         no_tests = rating_test.shape[0]
         square_error = 0
